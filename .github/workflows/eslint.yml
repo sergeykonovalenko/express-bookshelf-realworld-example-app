@@ -10,21 +10,20 @@ jobs:
   eslint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+
       - name: Install NVM
         run: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.41.0/install.sh | bash
+
       - name: Install Node.js
-        env:
-          NODE_VERSION: 26.13.1
-        run: nvm install $NODE_VERSION
+        run: |
+          export NVM_DIR="$HOME/.nvm"
+          . "$NVM_DIR/nvm.sh" --no-use
+          nvm install
+          echo "$NVM_DIR/versions/node/$(nvm version)/bin" >> "$GITHUB_PATH"
+
       - name: Install Dependencies
         run: npm ci
+
       - name: Lint source code with ESLint
         run: npm run lint
-        
-     
-      
-     
-
-
-
