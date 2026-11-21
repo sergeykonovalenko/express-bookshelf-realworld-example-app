@@ -8,7 +8,9 @@ on:
 
 jobs:
   eslint:
-    runs-on: node:26.13.1-alpine
+    runs-on: ubuntu-latest
+    container:
+      image: node:26.13.1-alpine
     steps:
       - uses: actions/checkout@v7.0.1
 
@@ -19,7 +21,9 @@ jobs:
         run: npm run lint
 
   prettier:
-    runs-on: node:26.13.1-alpine
+    runs-on: ubuntu-latest
+    container:
+      image: node:26.13.1-alpine
     steps:
       - uses: actions/checkout@v7.0.1
 
