@@ -3,11 +3,10 @@ stages:
 
 eslint: # назва джоби
   stage: lint
-  variables:
-    NODE_VERSION: 26.13.1
-    NVM_DIR: '$HOME/.nvm'
+  #variables:
+    # NODE_VERSION: 26.13.1
   script: # steps - як в GitHub Actions
-    - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+    - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.41.0/install.sh | bash
     - export NVM_DIR="$HOME/.nvm" && . "$NVM_DIR/nvm.sh" --no-use
     - eval "[ -f .nvmrc ] && nvm install"
     - npm install
