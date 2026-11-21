@@ -1,6 +1,16 @@
 stages:
   - lint
 
+cache:
+  key:
+    files:
+      - package-lock.json
+  paths:
+    - .npm/
+
+before_script:
+  - npm ci --cache .npm --prefer-offline
+
 eslint: # назва джоби
   image: node:26.13.1-alpine
   stage: lint
