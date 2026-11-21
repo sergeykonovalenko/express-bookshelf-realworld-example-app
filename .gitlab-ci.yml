@@ -7,7 +7,8 @@ eslint: # назва джоби
     NODE_VERSION: 26.13.1
     NVM_DIR: '$HOME/.nvm'
   script: # steps - як в GitHub Actions
-    - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.41.0/install.sh | bash
-    - . "$NVM_DIR/nvm.sh"
+    - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+    - export NVM_DIR="$HOME/.nvm" && . "$NVM_DIR/nvm.sh" --no-use
+    - eval "[ -f .nvmrc ] && nvm install"
     - npm install
     - npm run lint
