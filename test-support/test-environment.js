@@ -1,10 +1,10 @@
 'use strict';
 
-const NodeEnvironment = require('jest-environment-node');
+const {TestEnvironment: NodeEnvironment} = require('jest-environment-node');
 
 class TestEnvironment extends NodeEnvironment {
-  constructor(config) {
-    super(config);
+  constructor(config, context) {
+    super(config, context);
   }
 
   async setup() {
