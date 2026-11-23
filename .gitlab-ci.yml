@@ -41,4 +41,8 @@ deploy_backend:
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-    - scp -r $PWD deploy@92.5.7.89:~/realworld
+    - rsync -a --progress --human-readable --delete
+      --exclude-from '.gitignore'
+      --exclude .gitignore
+      --exclude .git
+      . deploy@92.5.7.89:~/realworld/
