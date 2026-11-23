@@ -46,3 +46,5 @@ deploy_backend:
       --exclude .gitignore
       --exclude .git
       . deploy@92.5.7.89:~/realworld/
+    - ssh deploy@92.5.7.89 "pushd ~/realworld && npm install && pm2 restart && popd"
+
