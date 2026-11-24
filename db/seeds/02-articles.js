@@ -2,7 +2,7 @@
 
 const chance = require('chance').Chance('articles-seed');
 const moment = require('moment');
-const slug = require('slug');
+const {default: slug} = require('slug');
 const {v4: uuidv4} = require('uuid');
 
 const getArticles = async (knex) => {

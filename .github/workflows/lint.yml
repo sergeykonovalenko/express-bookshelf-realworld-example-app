@@ -1,0 +1,77 @@
+name: Lint and deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  eslint:
+    runs-on: ubuntu-latest
+    container:
+      image: node:26.13.1-alpine
+    steps:
+      - uses: actions/checkout@v7.0.1
+
+      - name: Cache node.js modules
+        uses: actions/cache@v6.1.0
+        env:
+          cache-name: npm-${{ hashFiles('package-lock.json') }}
+        with:
+          path: ~/.npm
+          key: ${{ env.cache-name }}
+          restore-keys: |
+            ${{ env.cache-name }}
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Lint source code with ESLint
+        run: npm run lint
+
+  prettier:
+    runs-on: ubuntu-latest
+    container:
+      image: node:26.13.1-alpine
+    steps:
+      - uses: actions/checkout@v7.0.1
+
+      - name: Cache node.js modules
+        uses: actions/cache@v6.1.0
+        env:
+          cache-name: npm-${{ hashFiles('package-lock.json') }}
+        with:
+          path: ~/.npm
+          key: ${{ env.cache-name }}
+          restore-keys: |
+            ${{ env.cache-name }}
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Check source code with Prettier
+        run: npm run check:format
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          chmod 600 ~/.ssh/id_rsa
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+      - name: Copy files to server
+        run: |
+          rsync -a --progress --human-readable --delete \
+            --exclude-from '.gitignore' \
+            --exclude .gitignore \
+            --exclude .git \
+            . deploy@92.5.7.89:~/realworld/
+          ssh deploy@92.5.7.89 "pushd ~/realworld && npm install && pm2 restart realworld && popd"
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY_BACKEND }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS_BACKEND }}

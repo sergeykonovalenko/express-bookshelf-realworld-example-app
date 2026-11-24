@@ -1,12 +1,12 @@
-FROM node:14.17.0
+FROM node:26.13.1
 
 RUN npm install -g npm@latest
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
-COPY package.json package-lock.json ./
-RUN npm install
+COPY package.json package-lock.json .npmrc ./
+RUN npm ci
 
 COPY . .
 
